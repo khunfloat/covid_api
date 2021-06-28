@@ -3,7 +3,8 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from os import name
 import pathlib
-from fastbook import load_learner, Path
+from fastai import *
+from fastai.vision.all import *
 from uvicorn import run
 
 templates = Jinja2Templates(directory = "templates")
@@ -23,11 +24,11 @@ app = FastAPI(
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request" : request})
 
-@app.get("/doc", response_class=HTMLResponse)
+@app.get("/doc/", response_class=HTMLResponse)
 async def doc(request: Request):
     return templates.TemplateResponse("doc.html", {"request" : request})
 
-@app.post("/predict")
+@app.post("/predict/")
 async def predict(file: UploadFile = File(...)):
 
     if file.filename[-4:] in ['.jpg', '.png', 'jpeg']:
@@ -36,13 +37,13 @@ async def predict(file: UploadFile = File(...)):
                 "prediction" : pred,
                 "probability" : round(float(probs[pred_idx]), 4)}
 
-    else: return {"your request is denied. support .jpg, .png, .jpec file."}
+    else: return {"your requests denied. support .jpg, .png, .jpec file."}
 
-@app.get("/form")
+@app.get("/form/")
 async def main(request: Request):
     return templates.TemplateResponse("form.html", {"request" : request})
 
-@app.post("/result")
+@app.post("/result/")
 async def predict(request: Request, file: UploadFile = File(...)):
 
     if file.filename[-4:] in ['.jpg', '.png', 'jpeg']:
