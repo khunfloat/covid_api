@@ -5,7 +5,6 @@ from os import name
 import pathlib
 from fastai import *
 from fastai.vision.all import *
-from uvicorn import run
 
 templates = Jinja2Templates(directory = "templates")
 
@@ -57,6 +56,3 @@ async def predict(request: Request, file: UploadFile = File(...)):
         return templates.TemplateResponse("form.html", {"request" : request})
 
     else: return {"your request is denied. support .jpg, .png, .jpec file."}
-    
-if __name__ == "__main__":
-    run(app)
